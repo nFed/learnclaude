@@ -46,7 +46,7 @@ export default function Home() {
 
           {/* Heading */}
           <h1 className="animate-slide-up delay-200 mb-6 text-5xl font-800 leading-[1.05] tracking-tight text-foreground md:text-7xl lg:text-8xl">
-            Building the
+            Learning to build the
             <br />
             <span className="text-accent">web</span>, one
             <br />

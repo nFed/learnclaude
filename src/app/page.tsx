@@ -84,7 +84,7 @@ export default function Home() {
               href="https://nextjs.org/docs"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex h-14 items-center justify-center gap-3 rounded-full bg-accent px-8 font-mono text-sm font-bold tracking-wider text-background transition-all hover:bg-accent-dim hover:shadow-[0_0_30px_rgba(196,247,74,0.3)]"
+              className="group flex h-14 items-center justify-center gap-3 rounded-full bg-accent px-8 font-mono text-sm font-bold tracking-wider text-background transition-all hover:bg-accent-dim hover:shadow-[0_0_30px_rgba(0,212,255,0.3)]"
             >
               <span>EXPLORE DOCS</span>
               <svg
@@ -133,85 +133,85 @@ export default function Home() {
 
           <div className="space-y-6">
             {/* Phase 1 */}
-            <div className="group relative bg-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(196,247,74,0.1)]">
-              <div className="flex items-start gap-6">
+            <div className="group relative bg-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-4 sm:p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(0,212,255,0.1)]">
+              <div className="flex items-start gap-3 sm:gap-6">
                 <div className="flex-shrink-0 flex flex-col items-center gap-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-background font-mono font-bold">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-accent text-background font-mono font-bold text-sm sm:text-base">
                     01
                   </div>
                   <div className="h-full w-px bg-gradient-to-b from-accent to-transparent" />
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <h3 className="text-2xl font-bold text-foreground">Foundations</h3>
-                    <span className="px-3 py-1 rounded-full bg-accent/20 text-accent font-mono text-xs font-bold">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                    <h3 className="text-xl sm:text-2xl font-bold text-foreground">Foundations</h3>
+                    <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent font-mono text-[10px] sm:text-xs font-bold whitespace-nowrap w-fit">
                       COMPLETED
                     </span>
                   </div>
-                  <p className="text-muted mb-4">
+                  <p className="text-muted mb-4 text-sm sm:text-base">
                     Setting up the development environment, understanding Git basics, and creating the first Next.js application.
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">Git</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">Node.js</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">CLI Tools</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">Git</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">Node.js</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">CLI Tools</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Phase 2 */}
-            <div className="group relative bg-surface/30 backdrop-blur-sm border border-accent/50 rounded-2xl p-8 shadow-[0_0_30px_rgba(196,247,74,0.15)]">
-              <div className="flex items-start gap-6">
+            <div className="group relative bg-surface/30 backdrop-blur-sm border border-accent/50 rounded-2xl p-4 sm:p-8 shadow-[0_0_30px_rgba(0,212,255,0.15)]">
+              <div className="flex items-start gap-3 sm:gap-6">
                 <div className="flex-shrink-0 flex flex-col items-center gap-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-background font-mono font-bold animate-pulse">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-accent text-background font-mono font-bold text-sm sm:text-base animate-pulse">
                     02
                   </div>
                   <div className="h-full w-px bg-gradient-to-b from-accent to-transparent" />
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <h3 className="text-2xl font-bold text-foreground">React Fundamentals</h3>
-                    <span className="px-3 py-1 rounded-full bg-accent text-background font-mono text-xs font-bold">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                    <h3 className="text-xl sm:text-2xl font-bold text-foreground">React Fundamentals</h3>
+                    <span className="px-2.5 py-1 rounded-full bg-accent text-background font-mono text-[10px] sm:text-xs font-bold whitespace-nowrap w-fit">
                       IN PROGRESS
                     </span>
                   </div>
-                  <p className="text-muted mb-4">
+                  <p className="text-muted mb-4 text-sm sm:text-base">
                     Diving deep into React components, hooks, state management, and building interactive user interfaces.
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">Components</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">Hooks</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">State</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light text-foreground font-mono text-xs">Props</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">Components</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">Hooks</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">State</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light text-foreground font-mono text-[10px] sm:text-xs">Props</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Phase 3 */}
-            <div className="group relative bg-surface/20 backdrop-blur-sm border border-surface-light/50 rounded-2xl p-8 opacity-60">
-              <div className="flex items-start gap-6">
+            <div className="group relative bg-surface/20 backdrop-blur-sm border border-surface-light/50 rounded-2xl p-4 sm:p-8 opacity-60">
+              <div className="flex items-start gap-3 sm:gap-6">
                 <div className="flex-shrink-0 flex flex-col items-center gap-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-surface-light text-muted font-mono font-bold">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-surface-light text-muted font-mono font-bold text-sm sm:text-base">
                     03
                   </div>
                   <div className="h-full w-px bg-gradient-to-b from-surface-light to-transparent" />
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <h3 className="text-2xl font-bold text-foreground">Advanced Patterns</h3>
-                    <span className="px-3 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-xs font-bold">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                    <h3 className="text-xl sm:text-2xl font-bold text-foreground">Advanced Patterns</h3>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-[10px] sm:text-xs font-bold whitespace-nowrap w-fit">
                       UPCOMING
                     </span>
                   </div>
-                  <p className="text-muted mb-4">
+                  <p className="text-muted mb-4 text-sm sm:text-base">
                     Server components, data fetching strategies, API routes, and performance optimization techniques.
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-xs">Server Actions</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-xs">API Routes</span>
-                    <span className="px-3 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-xs">Optimization</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-[10px] sm:text-xs">Server Actions</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-[10px] sm:text-xs">API Routes</span>
+                    <span className="px-2.5 py-1 rounded-full bg-surface-light/50 text-muted font-mono text-[10px] sm:text-xs">Optimization</span>
                   </div>
                 </div>
               </div>
@@ -240,7 +240,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* React Card */}
-            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(196,247,74,0.1)]">
+            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(0,212,255,0.1)]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full blur-2xl" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
@@ -259,7 +259,7 @@ export default function Home() {
             </div>
 
             {/* Next.js Card */}
-            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(196,247,74,0.1)]">
+            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(0,212,255,0.1)]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full blur-2xl" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
@@ -278,7 +278,7 @@ export default function Home() {
             </div>
 
             {/* TypeScript Card */}
-            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(196,247,74,0.1)]">
+            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(0,212,255,0.1)]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full blur-2xl" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
@@ -297,7 +297,7 @@ export default function Home() {
             </div>
 
             {/* Tailwind Card */}
-            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(196,247,74,0.1)]">
+            <div className="group relative bg-gradient-to-br from-surface/50 to-surface/30 backdrop-blur-sm border border-surface-light rounded-2xl p-8 transition-all hover:border-accent/30 hover:shadow-[0_0_40px_rgba(0,212,255,0.1)]">
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full blur-2xl" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">

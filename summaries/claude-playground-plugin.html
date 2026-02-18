@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Playground Plugin — סקירה מעמיקה</title>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Noto+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #FAF7F2;
+      --bg-secondary: #F0EBE3;
+      --bg-hero: #1C1917;
+      --text-primary: #1C1917;
+      --text-secondary: #57534E;
+      --text-on-dark: #FAF7F2;
+      --accent: #C2410C;
+      --accent-light: #FED7AA;
+      --accent-hover: #9A3412;
+      --border: #D6D3D1;
+      --quote-bg: #FFFBEB;
+      --quote-border: #F59E0B;
+      --takeaway-bg: #F0FDF4;
+      --takeaway-accent: #16A34A;
+      --shadow: rgba(28,25,23,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Noto Sans Hebrew', sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--bg-hero);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-family: 'Noto Sans Hebrew', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+    .hero h1 {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      color: var(--text-on-dark);
+      line-height: 1.15;
+      max-width: 800px;
+      margin: 0 auto 1rem;
+    }
+    .hero-accent-line {
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      margin: 1.5rem auto;
+      border-radius: 2px;
+    }
+    .hero-meta {
+      font-family: 'Noto Sans Hebrew', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--accent-light);
+      opacity: 0.85;
+    }
+    .hero-meta span {
+      margin: 0 0.6rem;
+      opacity: 0.5;
+    }
+
+    /* ─── PLAYER ─── */
+    .player-section {
+      max-width: 860px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+    .player-wrapper {
+      position: relative;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px var(--shadow), 0 2px 8px rgba(28,25,23,0.12);
+    }
+    .player-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      max-width: 860px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+    }
+    .stats-inner {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 0 2rem;
+      border-left: 1px solid var(--border);
+      flex: 1;
+      min-width: 110px;
+    }
+    .stat-item:last-child { border-left: none; }
+    .stat-num {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* ─── LAYOUT ─── */
+    .content-layout {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    /* ─── CHAPTER NAV ─── */
+    .chapter-nav {
+      margin-bottom: 3rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .chapter-nav-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+    }
+    .chapters-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      list-style: none;
+    }
+    .chapter-btn {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: right;
+    }
+    .chapter-btn:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+      border-color: var(--accent-light);
+    }
+    .chapter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .chapter-time {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      font-variant-numeric: tabular-nums;
+      font-family: monospace;
+    }
+
+    /* ─── SECTION DIVIDER ─── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    /* ─── CONTENT SECTIONS ─── */
+    .content-section {
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .content-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .section-accent-bar {
+      width: 4px;
+      min-height: 2rem;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 0.3rem;
+    }
+    .section-header h2 {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .section-body p {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body ul {
+      list-style: none;
+      margin: 0.8rem 0;
+      padding: 0;
+    }
+    .section-body ul li {
+      padding: 0.35rem 0 0.35rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      color: var(--text-primary);
+    }
+    .section-body ul li::before {
+      content: '▸';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+      font-size: 0.9rem;
+    }
+
+    /* ─── TEMPLATE CARDS GRID ─── */
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .template-card {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .template-card:hover {
+      box-shadow: 0 4px 16px var(--shadow);
+      transform: translateY(-2px);
+    }
+    .template-card-name {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .template-card-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ─── BLOCKQUOTES ─── */
+    .quote-block {
+      background: var(--quote-bg);
+      border-right: 4px solid var(--quote-border);
+      border-radius: 8px;
+      padding: 1.5rem 2rem 1.5rem 1.5rem;
+      margin: 2rem 0;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .quote-block.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .quote-deco {
+      position: absolute;
+      top: -0.5rem;
+      right: 1.2rem;
+      font-size: 4.5rem;
+      font-family: 'Frank Ruhl Libre', serif;
+      color: var(--quote-border);
+      opacity: 0.25;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .quote-text {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 0.6rem;
+    }
+    .quote-original {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+      padding-top: 0.6rem;
+      margin-top: 0.6rem;
+      font-style: normal;
+    }
+    .quote-attribution {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-style: normal;
+      margin-top: 0.4rem;
+    }
+
+    /* ─── KEY TAKEAWAYS ─── */
+    .takeaways-section {
+      background: var(--takeaway-bg);
+      border-top: 4px solid var(--takeaway-accent);
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      margin-top: 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .takeaways-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .takeaways-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--takeaway-accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .takeaways-list {
+      list-style: none;
+      counter-reset: takeaway-counter;
+    }
+    .takeaways-list li {
+      counter-increment: takeaway-counter;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(22,163,74,0.15);
+    }
+    .takeaways-list li:last-child { border-bottom: none; }
+    .takeaway-num {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--takeaway-accent);
+      min-width: 1.8rem;
+      line-height: 1.4;
+    }
+
+    /* ─── SCROLL TO TOP ─── */
+    #scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      width: 46px;
+      height: 46px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 12px var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #scroll-top.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #scroll-top:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      .stats-inner { flex-direction: column; gap: 1rem; }
+      .stat-item { border-left: none; border-top: 1px solid var(--border); padding: 0.8rem 0; }
+      .stat-item:first-child { border-top: none; }
+      .hero { padding: 3rem 1.5rem; }
+      .content-layout { padding: 0 1.2rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<header class="hero">
+  <p class="hero-eyebrow">Claude Code · סקירת פלאגין</p>
+  <h1>Playground Plugin: דרך חדשה לשוחח עם Claude</h1>
+  <div class="hero-accent-line"></div>
+  <p class="hero-meta">
+    Alex — Grit AI Studio
+    <span>·</span>
+    15 דקות
+    <span>·</span>
+    English (auto-generated)
+  </p>
+</header>
+
+<!-- ─── PLAYER ─── -->
+<section class="player-section">
+  <div class="player-wrapper">
+    <iframe id="yt-player"
+      src="https://www.youtube.com/embed/_VBmr6Rh56Y?enablejsapi=1"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+
+<!-- ─── STATS BAR ─── -->
+<section class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-num">15</span>
+      <span class="stat-label">דקות</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">6</span>
+      <span class="stat-label">תבניות מובנות</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4</span>
+      <span class="stat-label">דמואים חיים</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">6</span>
+      <span class="stat-label">טיפים מעשיים</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MAIN CONTENT ─── -->
+<main class="content-layout">
+
+  <!-- CHAPTER NAV -->
+  <nav class="chapter-nav" aria-label="ניווט פרקים">
+    <p class="chapter-nav-title">תוכן הסרטון</p>
+    <ul class="chapters-list">
+      <li><button class="chapter-btn" onclick="seekTo(0)">
+        <span class="chapter-time">0:00</span> מבוא ותיאור הפלאגין
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(103)">
+        <span class="chapter-time">1:43</span> התקנה
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(148)">
+        <span class="chapter-time">2:28</span> ארכיטקטורה ומבנה
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(208)">
+        <span class="chapter-time">3:28</span> שש התבניות
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(223)">
+        <span class="chapter-time">3:43</span> דמו: Code Map
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(245)">
+        <span class="chapter-time">4:05</span> דמו: Document Critique
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(362)">
+        <span class="chapter-time">6:02</span> דמו: Image Annotation
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(533)">
+        <span class="chapter-time">8:53</span> דמו: Concept Map
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(664)">
+        <span class="chapter-time">11:04</span> סקירת התבניות
+      </button></li>
+      <li><button class="chapter-btn" onclick="seekTo(765)">
+        <span class="chapter-time">12:45</span> טיפים מקצועיים
+      </button></li>
+    </ul>
+  </nav>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 1: מה זה -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>מה זה פלאגין ה-Playground?</h2>
+    </div>
+    <div class="section-body">
+      <p>פלאגין ה-Playground הוא אחד הפלאגינים הרשמיים של Anthropic, אך הוא שונה מהותית מרוב הפלאגינים הקיימים. הוא אינו מוסיף פקודת slash ואינו מגדיר MCP server — במקום זאת, <strong>הוא מלמד את Claude מיומנות חדשה לחלוטין</strong>.</p>
+      <p>המיומנות הזו: ליצור interactive HTML playgrounds — קבצי HTML בודדים שנפתחים בדפדפן ומכילים ממשק שלם של פקדים, תצוגה חיה, ופלט prompt.</p>
+      <ul>
+        <li>קובץ HTML יחיד, ללא תלויות חיצוניות — ניתן לשיתוף ושמירה מיידית</li>
+        <li>פקדים אינטראקטיביים: סליידרים, תפריטים, כפתורי אישור/דחייה, color pickers</li>
+        <li>תצוגה חיה שמתעדכנת בזמן אמת לפי הפקדים</li>
+        <li>פאנל פלט prompt בתחתית — מייצר הוראות בשפה טבעית, לא dump של ערכים</li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- QUOTE 1 -->
+  <blockquote class="quote-block">
+    <span class="quote-deco">"</span>
+    <p class="quote-text">Claude בונה ממשקים מותאמים אישית לאיסוף הפידבק שלך — כלים ויזואליים שמתרגמים את האינטראקציות שלך להוראות מדויקות.</p>
+    <p class="quote-original">"Claude builds custom interfaces to capture your feedback, visual tools that translate your interactions back into precise instructions."</p>
+    <p class="quote-attribution">— Alex, Grit AI Studio</p>
+  </blockquote>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 2: התקנה -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>התקנה — פשוטה כמו שנדמה</h2>
+    </div>
+    <div class="section-body">
+      <p>הפלאגין נמצא ב-marketplace הרשמי של Anthropic, שמגיע מוגדר מראש ב-Claude Code. אין צורך להוסיף marketplace ידנית.</p>
+      <ul>
+        <li>הרץ <code>/plugin</code> וחפש "playground"</li>
+        <li>לחלופין, הרץ את פקודת ההתקנה הישירה</li>
+        <li>ייתכן שתצטרך לאתחל את Claude לאחר ההתקנה</li>
+        <li>הפלאגין מבוסס skill — Claude יודע לזהות מתי להפעיל אותו אוטומטית לפי הבקשה שלך</li>
+      </ul>
+      <p>לא צריך לכתוב "השתמש בפלאגין Playground" — מספיק לבקש "צור כלי אינטראקטיבי" ו-Claude יבין.</p>
+    </div>
+  </article>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 3: ארכיטקטורה -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>ארכיטקטורה: שלושת הפאנלים</h2>
+    </div>
+    <div class="section-body">
+      <p>כל Playground שנוצר על-ידי Claude עוקב אחרי אותו pattern קבוע:</p>
+      <ul>
+        <li><strong>פאנל שמאל — פקדים:</strong> סליידרים, dropdown, color pickers, toggles — בהתאמה לצורך הספציפי</li>
+        <li><strong>פאנל ימין — תצוגה חיה:</strong> מתעדכן מיד עם כל שינוי בפקדים</li>
+        <li><strong>פאנל תחתון — פלט prompt:</strong> מייצר הוראות בשפה טבעית שניתן להעתיק בחזרה ל-Claude</li>
+      </ul>
+      <p>חשוב: פלט ה-prompt אינו dump של ערכים. הוא מדבר רק על <em>מה שהשתנה</em> מברירות המחדל, ומנסח אותם כהוראות ברורות ומלאות הקשר.</p>
+    </div>
+  </article>
+
+  <!-- QUOTE 2 -->
+  <blockquote class="quote-block">
+    <span class="quote-deco">"</span>
+    <p class="quote-text">המשמעות האמיתית כאן אינה פרומפטים טובים יותר — זהו לולאת אינטראקציה חדשה. Claude בונה ממשק המותאם למשימה שלך. אתה נותן פידבק דרכו. ה-playground מתרגם אותו להוראות שClaudeמבין.</p>
+    <p class="quote-original">"The real shift here isn't better prompts. It's a new interaction loop."</p>
+    <p class="quote-attribution">— Alex, Grit AI Studio</p>
+  </blockquote>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 4: שש תבניות -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>שש תבניות מובנות</h2>
+    </div>
+    <div class="section-body">
+      <p>הפלאגין מגיע עם שש תבניות מוכנות לשימוש, לכל אחת מטרה שונה:</p>
+      <div class="templates-grid">
+        <div class="template-card">
+          <p class="template-card-name">Design Playground</p>
+          <p class="template-card-desc">סליידרים לקונפיגורציית רכיב UI — ריווח, צבע, טיפוגרפיה, צללים. לחקירת כיוון עיצובי במהירות, ללא תיאור מילולי.</p>
+        </div>
+        <div class="template-card">
+          <p class="template-card-name">Data Explorer</p>
+          <p class="template-card-desc">בניית queries ויזואלית עבור SQL, APIs, regex pipelines. קובע specification שניתן להעתיק.</p>
+        </div>
+        <div class="template-card">
+          <p class="template-card-name">Document Critique</p>
+          <p class="template-card-desc">הדבק מסמך וקבל ממשק סקירה עם הצעות שורה-שורה — כפתורי אישור, דחייה, הערה. מומלץ לסקירת CLAUDE.md ו-README.</p>
+        </div>
+        <div class="template-card">
+          <p class="template-card-name">Diff Review</p>
+          <p class="template-card-desc">אותו רעיון, לקוד. מציג diff עם הדגשת שורות ירוק/אדום, הוספת הערות inline, ויוצר פרומפט code review מובנה.</p>
+        </div>
+        <div class="template-card">
+          <p class="template-card-name">Concept Map</p>
+          <p class="template-card-desc">canvas עם פיזיקת כוח (force-directed layout), צמתים וקשתות שמייצגים קשרים. כולל toggle לרמת ידע: ידוע / מעורפל / חדש לחלוטין.</p>
+        </div>
+        <div class="template-card">
+          <p class="template-card-name">Code Map</p>
+          <p class="template-card-desc">דיאגרמת ארכיטקטורה SVG. צמתים מייצגים קומפוננטות עם file paths, קשתות מציגות data flow ותלויות. קליק להוספת הערות.</p>
+        </div>
+      </div>
+      <p style="margin-top:1.2rem">כל שש עוקבות אחר אותו core pattern: פקדים → תצוגה חיה → פלט prompt → כפתור copy.</p>
+    </div>
+  </article>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 5: דמואים -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>הדמואים: מה בנו בזמן אמת?</h2>
+    </div>
+    <div class="section-body">
+      <p><strong>Code Map לקוד בסיס:</strong> Alex ביקש מ-Claude להסביר את ה-codebase דרך Playground ממופה שבו ניתן לשאול שאלות על חלקים ספציפיים. Claude יצר מפת ארכיטקטורה עם צמתים לחיצים, וניתן לבחור צומת ולשאול "אני לא מבין את זה" — ולקבל הסבר ממוקד.</p>
+      <p><strong>Document Critique ל-CLAUDE.md:</strong> הוא ביקש לסקור קובץ בלי לפחד למחוק תוכן חשוב. Claude יצר ממשק שבו כל הצעה מסומנת ויש לה כפתורי אישור/דחייה/הערה — לפני שמשנים את הקובץ בפועל.</p>
+      <p><strong>Image Annotation מותאם אישית:</strong> ביקש ממשק של הערות על תמונה — canvas לציור מלבנים, פאנל צד להערות, ופאנל prompt תחתון. Claude בנה את כלי ה-annotation המלא בקובץ HTML אחד. הפלט? הוראות ממוקדות עם מיקום מדויק על המסך.</p>
+      <p><strong>Concept Map לתפיסת מושגים:</strong> בקש מפה של מערכת הפלאגינים של Claude Code — plugins, skills, agents, hooks, MCP servers. Claude חקר את התיעוד הרשמי ובנה Playground עם toggle ל-3 רמות ידע: ירוק (יודע), ענבר (מעורפל), אדום (חדש לגמרי). הפלט: פרומפט למידה ממוקד בדיוק לפי מה שאתה יודע ומה לא.</p>
+    </div>
+  </article>
+
+  <!-- QUOTE 3 -->
+  <blockquote class="quote-block">
+    <span class="quote-deco">"</span>
+    <p class="quote-text">לא תיארתי היכן כל דבר נמצא. פשוט הצבעתי עליו.</p>
+    <p class="quote-original">"I didn't describe where anything was. I pointed at it."</p>
+    <p class="quote-attribution">— Alex, על ה-Image Annotation Playground</p>
+  </blockquote>
+
+  <!-- QUOTE 4 -->
+  <blockquote class="quote-block">
+    <span class="quote-deco">"</span>
+    <p class="quote-text">זה לא כלי עזר לפרומפטים. זהו כלי לצילום מצב ידע. אתה אומר ל-Claude בדיוק היכן אתה עומד, והוא מייצר פרומפט שפוגש אותך שם.</p>
+    <p class="quote-original">"It's not a prompt helper. It's a knowledge state capture tool."</p>
+    <p class="quote-attribution">— Alex</p>
+  </blockquote>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 6: קהילה -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>מה הקהילה כבר בונה?</h2>
+    </div>
+    <div class="section-body">
+      <p>מי שנחשפו לפלאגין כבר מצאו שימושים יצירתיים:</p>
+      <ul>
+        <li>מישהו בנה מנגנון שמשלח את הפידבק ישירות ל-Claude דרך MCP trick — ללא צורך בהעתקה-הדבקה ידנית</li>
+        <li>שימוש עם <strong>Nana Banana</strong> (כלי image generation): ציור הערות על תמונה שנוצרה, ושליחת הוראות מדויקות לשיפור — ויזואלי-אין, טקסט-אאוט</li>
+        <li>Playground לאנימציות — חקירת interactionsשונות</li>
+        <li>חוויות למידה אינטראקטיביות מותאמות אישית</li>
+      </ul>
+    </div>
+  </article>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 7: טיפים -->
+  <article class="content-section">
+    <div class="section-header">
+      <div class="section-accent-bar"></div>
+      <h2>שישה טיפים מהשטח</h2>
+    </div>
+    <div class="section-body">
+      <ul>
+        <li><strong>אפשר לשנות כל Playground לאחר יצירתו</strong> — זה רק קובץ HTML. בקש מ-Claude לשנות פקדים, layout, או erthem עיצוב</li>
+        <li><strong>Presets הם החבר הכי טוב שלך</strong> — התחל בלחיצה על presets לפני שנוגעים בפקדים בודדים. לרוב preset אחד יוביל ל-80% מהתוצאה</li>
+        <li><strong>פלט ה-prompt הוא context-complete</strong> — ניתן להדביק אותו בsession שונה לחלוטין ב-Claude ועדיין יהיה מובן</li>
+        <li><strong>Concept Map עם auto layout</strong> — לחץ "Auto Layout" אם הצמתים התבלגנו, הם יסתדרו בחזרה לסדר קריא</li>
+        <li><strong>אם אין תבנית שמתאימה — פשוט בקש</strong> — Claude יבחר את הקרובה ביותר ויתאים</li>
+        <li><strong>שלב עם כלים ויזואליים אחרים</strong> — Playgrounds עובדים מצוין עם image generation וכלים ויזואליים אחרים. שלב עם frontend-design skill לממשק מפואר עוד יותר</li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- KEY TAKEAWAYS -->
+  <section class="takeaways-section">
+    <h2 class="takeaways-title">✦ תובנות מרכזיות</h2>
+    <ol class="takeaways-list">
+      <li>
+        <span class="takeaway-num">1</span>
+        <span>פלאגין ה-Playground משנה את מודל האינטראקציה — מהקלדת פרומפטים, להצבעה, לחיצה וגרירה</span>
+      </li>
+      <li>
+        <span class="takeaway-num">2</span>
+        <span>כל Playground הוא קובץ HTML יחיד, ללא תלויות — ניתן לשיתוף ועריכה ישירה</span>
+      </li>
+      <li>
+        <span class="takeaway-num">3</span>
+        <span>פלט ה-prompt אינו dump — הוא מייצר הוראות בשפה טבעית, מלאות הקשר, ומדויקות לשינויים שבוצעו</span>
+      </li>
+      <li>
+        <span class="takeaway-num">4</span>
+        <span>שש תבניות מובנות מכסות את רוב הצרכים: עיצוב, נתונים, מסמכים, קוד, מפות רעיוניות וארכיטקטורה</span>
+      </li>
+      <li>
+        <span class="takeaway-num">5</span>
+        <span>Playgrounds מותאמים אישית פותחים אפשרויות בלתי מוגבלות — Claude יכול לבנות כל כלי visual feedback שתתאר</span>
+      </li>
+      <li>
+        <span class="takeaway-num">6</span>
+        <span>השילוב עם כלים ויזואליים אחרים (image generation, frontend-design) יוצר לולאת עבודה עוצמתית: visual in → visual out → visual feedback</span>
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" aria-label="חזרה לראש הדף">↑</button>
+
+<script>
+  // YouTube IFrame API
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('yt-player', {
+      events: { 'onReady': function(e) {} }
+    });
+  }
+  function seekTo(seconds) {
+    if (player && player.seekTo) {
+      player.seekTo(seconds, true);
+      player.playVideo();
+    }
+    // Update active button
+    document.querySelectorAll('.chapter-btn').forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    // Scroll to player
+    document.querySelector('.player-section').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Load YouTube API
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  // Scroll-to-top
+  var scrollBtn = document.getElementById('scroll-top');
+  window.addEventListener('scroll', function() {
+    scrollBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Fade-in on scroll
+  var animatedEls = document.querySelectorAll('.content-section, .quote-block, .takeaways-section');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  animatedEls.forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>
